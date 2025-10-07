@@ -65,12 +65,17 @@
         // --- FUNÇÃO PARA BUSCAR E PROCESSAR OS DADOS ---
         async function carregarDadosDaPlanilha() {
             const urlPlanilha = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQBgoOo6EBhtoY_n3pkqoUHLNDJtrFx0j_9H32mqIdYWIY5CY13BW5kjl6GlNtgyMU4jU7vSUKrvYCw/pub?output=csv'; 
-            
+            // Usamos um proxy alternativo e mais robusto para evitar problemas de CORS
+            const proxiedUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(urlPlanilha)}`;
+
             try {
-                const resposta = await fetch(urlPlanilha);
+                const resposta = await fetch(proxiedUrl);
                 if (!resposta.ok) throw new Error(`Erro na rede: ${resposta.statusText}`);
-                const textoCsv = await resposta.text();
                 
+                const data = await resposta.json();
+                const textoCsv = data.contents; // O conteúdo CSV vem dentro de uma propriedade 'contents'
+                if (!textoCsv) throw new Error('O proxy não retornou conteúdo CSV.');
+
                 const linhas = textoCsv.trim().split(/\r?\n/);
                 const cabecalho = linhas[0].split(',').map(h => h.trim());
                 const csvRegex = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/;
@@ -243,6 +248,4 @@
         });
     </script>
 </body>
-
 </html>
-
