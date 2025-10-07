@@ -65,11 +65,9 @@
         // --- FUNÇÃO PARA BUSCAR E PROCESSAR OS DADOS ---
         async function carregarDadosDaPlanilha() {
             const urlPlanilha = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQBgoOo6EBhtoY_n3pkqoUHLNDJtrFx0j_9H32mqIdYWIYCY13BW5kjl6GlNtgyMU4jU7vSUKrvYCw/pub?gid=0&single=true&output=csv'; 
-            // Usamos um proxy para evitar problemas de CORS (Cross-Origin Resource Sharing)
-            const proxiedUrl = 'https://corsproxy.io/?' + urlPlanilha;
-
+            
             try {
-                const resposta = await fetch(proxiedUrl);
+                const resposta = await fetch(urlPlanilha);
                 if (!resposta.ok) throw new Error(`Erro na rede: ${resposta.statusText}`);
                 const textoCsv = await resposta.text();
                 
