@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Gestão de Portfólio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .tab-button.active { border-bottom-color: #3b82f6; color: #3b82f6; font-weight: 600; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .farol-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <header class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">Dashboard de Gestão de Portfólio</h1>
+            <p class="text-gray-600 mt-1">Visão integrada das iniciativas e métricas de fluxo.</p>
+        </header>
+
+        <div class="border-b border-gray-200 mb-6">
+            <nav class="-mb-px flex space-x-6" aria-label="Tabs">
+                <button onclick="changeTab('metrics')" class="tab-button active whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" data-tab="metrics">Métricas de Fluxo</button>
+                <button onclick="changeTab('summary')" class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="summary">Sumário de Projetos</button>
+                <button onclick="changeTab('matrix')" class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="matrix">Matriz de Priorização</button>
+            </nav>
+        </div>
+
+        <main>
+            <!-- ABA DE MÉTRICAS -->
+            <div id="metrics-content" class="tab-content active">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+
+                    <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+                        <h3 class="text-sm font-medium text-gray-500">Taxa de Entrada</h3>
+                        <p id="taxaEntrada" class="mt-2 text-3xl font-bold">--</p>
+                        <p class="text-xs text-gray-400 mt-1">Iniciativas novas ÷ período</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+                        <h3 class="text-sm font-medium text-gray-500">Taxa de Saída</h3>
+                        <p id="taxaSaida" class="mt-2 text-3xl font-bold">--</p>
+                        <p class="text-xs text-gray-400 mt-1">Iniciativas concluídas ÷ período</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+                        <h3 class="text-sm font-medium text-gray-500">Lead Time Médio</h3>
+                        <p id="leadTimeMedio" class="mt-2 text-3xl font-bold">--</p>
+                        <p class="text-xs text-gray-400 mt-1">(Data fim – Data início) médio</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+                        <h3 class="text-sm font-medium text-gray-500">Aging Médio</h3>
+                        <p id="agingMedio" class="mt-2 text-3xl font-bold">--</p>
+                        <p class="text-xs text-gray-400 mt-1">Média de dias desde a entrada</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+                        <h3 class="text-sm font-medium text-gray-500">Backlog Transportado</h3>
+                        <p id="backlog" class="mt-2 text-3xl font-bold">--</p>
+                        <p class="text-xs text-gray-400 mt-1">Iniciativas abertas no fim do mês</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100 col-span-1 sm:col-span-2 lg:col-span-3">
+                        <h3 class="text-sm font-medium text-gray-500">Extrato por Complexidade</h3>
+                        <canvas id="complexityChart" class="mt-4"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUMÁRIO DE PROJETOS -->
+            <div id="summary-content" class="tab-content">
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 overflow-x-auto">
+                    <table class="w-full text-sm text-left text-gray-500">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3">Iniciativa</th>
+                                <th class="px-6 py-3">Responsável</th>
+                                <th class="px-6 py-3">Fluxo</th>
+                                <th class="px-6 py-3">Progresso</th>
+                                <th class="px-6 py-3">Farol</th>
+                                <th class="px-6 py-3">Status</th>
+                                <th class="px-6 py-3">GP</th>
+                            </tr>
+                        </thead>
+                        <tbody id="projects-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- MATRIZ DE PRIORIZAÇÃO -->
+            <div id="matrix-content" class="tab-content">
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label for="filter-gp" class="block text-sm font-medium text-gray-700">Filtrar por GP</label>
+                            <select id="filter-gp" class="mt-1 block w-full border-gray-300 rounded-md">
+                                <option>Todos</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="filter-area" class="block text-sm font-medium text-gray-700">Filtrar por Área</label>
+                            <select id="filter-area" class="mt-1 block w-full border-gray-300 rounded-md">
+                                <option>Todos</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="filter-status" class="block text-sm font-medium text-gray-700">Filtrar por Status</label>
+                            <select id="filter-status" class="mt-1 block w-full border-gray-300 rounded-md">
+                                <option>Todos</option>
+                                <option>Em dia</option>
+                                <option>Oportunidade</option>
+                                <option>Atenção</option>
+                                <option>Impedido</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-4 gap-1">
+                    <div></div>
+                    <div class="text-center font-bold text-sm bg-gray-100 rounded-t-lg">Baixa (1)</div>
+                    <div class="text-center font-bold text-sm bg-gray-100 rounded-t-lg">Média (2)</div>
+                    <div class="text-center font-bold text-sm bg-gray-100 rounded-t-lg">Alta (3)</div>
+                    <div class="text-center font-bold text-sm bg-gray-100 rounded-l-lg">Forte (3)</div>
+                    <div id="cell-3-1" class="bg-yellow-100 p-3 min-h-[150px] border-2 border-dashed border-yellow-200 rounded-lg"></div>
+                    <div id="cell-3-2" class="bg-green-100 p-3 min-h-[150px] border-2 border-dashed border-green-200 rounded-lg"></div>
+                    <div id="cell-3-3" class="bg-red-100 p-3 min-h-[150px] border-2 border-dashed border-red-200 rounded-lg"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+<script>
+let projectsData = [];
+
+async function carregarDadosDaPlanilha() {
+    const urlPlanilha = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQBgoOo6EBhtoY_n3pkqoUHLNDJtrFx0j_9H32mqIdYWIY5CY13BW5kjl6GlNtgyMU4jU7vSUKrvYCw/pub?gid=0&single=true&output=csv';
+    const resposta = await fetch(urlPlanilha);
+    const textoCsv = await resposta.text();
+    const linhas = textoCsv.trim().split(/\r?\n/);
+    const cabecalho = linhas[0].split(',').map(h => h.trim());
+    return linhas.slice(1).map(l => {
+        const valores = l.split(';');
+        const obj = {};
+        cabecalho.forEach((c, i) => obj[c] = valores[i]?.trim());
+        return obj;
+    });
+}
+
+function calcularMetricas(dados) {
+    const hoje = new Date();
+    const taxaEntrada = dados.filter(d => d.status === 'Novo').length;
+    const taxaSaida = dados.filter(d => d.status === 'Concluído').length;
+    const backlog = dados.filter(d => d.status !== 'Concluído').length;
+
+    const leadTimes = dados.filter(d => d.data_inicio && d.data_fim)
+        .map(d => (new Date(d.data_fim) - new Date(d.data_inicio)) / (1000 * 60 * 60 * 24));
+    const leadTimeMedio = leadTimes.length ? (leadTimes.reduce((a, b) => a + b) / leadTimes.length).toFixed(1) : 0;
+
+    const aging = dados.filter(d => d.data_entrada)
+        .map(d => (hoje - new Date(d.data_entrada)) / (1000 * 60 * 60 * 24));
+    const agingMedio = aging.length ? (aging.reduce((a, b) => a + b) / aging.length).toFixed(1) : 0;
+
+    return { taxaEntrada, taxaSaida, backlog, leadTimeMedio, agingMedio };
+}
+
+function renderComplexityChart() {
+    const ctx = document.getElementById('complexityChart').getContext('2d');
+    const projectCounts = projectsData.reduce((acc, p) => {
+        const score = (parseInt(p.prioridade) || 0) + (parseInt(p.impacto) || 0);
+        if (score <= 3) acc['Baixa Relevância'] = (acc['Baixa Relevância'] || 0) + 1;
+        else if (score === 4) acc['Oportunidade Tática'] = (acc['Oportunidade Tática'] || 0) + 1;
+        else acc['Alta Prioridade'] = (acc['Alta Prioridade'] || 0) + 1;
+        return acc;
+    }, {});
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: Object.keys(projectCounts),
+            datasets: [{
+                label: 'Nº de Iniciativas',
+                data: Object.values(projectCounts),
+                backgroundColor: ['#9CA3AF', '#FBBF24', '#3B82F6']
+            }]
+        },
+        options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+    });
+}
+
+function atualizarMetricas(m) {
+    document.getElementById('taxaEntrada').textContent = m.taxaEntrada;
+    document.getElementById('taxaSaida').textContent = m.taxaSaida;
+    document.getElementById('leadTimeMedio').textContent = `${m.leadTimeMedio} dias`;
+    document.getElementById('agingMedio').textContent = `${m.agingMedio} dias`;
+    document.getElementById('backlog').textContent = m.backlog;
+}
+
+function changeTab(tabName) {
+    document.querySelectorAll('.tab-button').forEach(b => { b.classList.remove('active'); if (b.dataset.tab === tabName) b.classList.add('active'); });
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.getElementById(`${tabName}-content`).classList.add('active');
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    projectsData = await carregarDadosDaPlanilha();
+    const metricas = calcularMetricas(projectsData);
+    atualizarMetricas(metricas);
+    renderComplexityChart();
+});
+</script>
+</body>
+</html>
