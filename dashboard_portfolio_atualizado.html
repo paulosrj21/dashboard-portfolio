@@ -79,6 +79,33 @@
 
             <!-- MATRIZ DE PRIORIZAÇÃO -->
             <div id="matrix-content" class="tab-content">
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label for="filter-gp" class="block text-sm font-medium text-gray-700">Filtrar por GP</label>
+                            <select id="filter-gp" class="mt-1 block w-full border-gray-300 rounded-md">
+                                <option>Todos</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="filter-area" class="block text-sm font-medium text-gray-700">Filtrar por Área</label>
+                            <select id="filter-area" class="mt-1 block w-full border-gray-300 rounded-md">
+                                <option>Todos</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="filter-status" class="block text-sm font-medium text-gray-700">Filtrar por Status</label>
+                            <select id="filter-status" class="mt-1 block w-full border-gray-300 rounded-md">
+                                <option>Todos</option>
+                                <option>Em dia</option>
+                                <option>Oportunidade</option>
+                                <option>Atenção</option>
+                                <option>Impedido</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 overflow-x-auto">
                     <div class="grid grid-cols-4 gap-1 min-w-[600px]">
                         <div></div>
@@ -188,10 +215,40 @@ function renderSummaryTable() {
     });
 }
 
-function renderMatrix() {
-    document.querySelectorAll('[id^="cell-"]').forEach(cell => cell.innerHTML = '');
+function setupFilters() {
+    const gpFilter = document.getElementById('filter-gp');
+    const areaFilter = document.getElementById('filter-area');
+    const statusFilter = document.getElementById('filter-status');
 
-    projectsData.forEach(p => {
+    const gps = [...new Set(projectsData.map(p => p.gp).filter(Boolean))];
+    const areas = [...new Set(projectsData.map(p => p.responsavel).filter(Boolean))];
+
+    gps.forEach(gp => gpFilter.innerHTML += `<option>${gp}</option>`);
+    areas.forEach(area => areaFilter.innerHTML += `<option>${area}</option>`);
+
+    gpFilter.addEventListener('change', applyFilters);
+    areaFilter.addEventListener('change', applyFilters);
+    statusFilter.addEventListener('change', applyFilters);
+}
+
+function applyFilters() {
+    const selectedGp = document.getElementById('filter-gp').value;
+    const selectedArea = document.getElementById('filter-area').value;
+    const selectedStatus = document.getElementById('filter-status').value;
+
+    const filteredData = projectsData.filter(p => {
+        const gpMatch = selectedGp === 'Todos' || p.gp === selectedGp;
+        const areaMatch = selectedArea === 'Todos' || p.responsavel === selectedArea;
+        const statusMatch = selectedStatus === 'Todos' || p.farol === selectedStatus;
+        return gpMatch && areaMatch && statusMatch;
+    });
+
+    renderMatrix(filteredData);
+}
+
+function renderMatrix(data) {
+    document.querySelectorAll('[id^="cell-"]').forEach(cell => cell.innerHTML = '');
+    (data || projectsData).forEach(p => {
         const impacto = parseInt(p.impacto);
         const prioridade = parseInt(p.prioridade);
         if (!impacto || !prioridade) return;
@@ -208,7 +265,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const metricas = calcularMetricas(projectsData);
     atualizarMetricas(metricas);
     renderSummaryTable();
-    renderMatrix();
+    setupFilters();
+    applyFilters();
 });
 
 function changeTab(tabName) {
