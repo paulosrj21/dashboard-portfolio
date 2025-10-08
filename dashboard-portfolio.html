@@ -192,9 +192,9 @@
     </div>
 
     <script>
-        // --- DADOS ---
+    // --- DADOS ---
         let projectsData = [];
-
+    
         // Função para converter data DD/MM/YYYY para um objeto Date
         function parseDate(dateStr) {
             if (!dateStr || typeof dateStr !== 'string') return null;
@@ -205,7 +205,7 @@
             }
             return new Date(dateStr); // Tenta formato padrão
         }
-
+    
         async function carregarDadosDaPlanilha() {
             const urlPlanilha = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQBgoOo6EBhtoY_n3pkqoUHLNDJtrFx0j_9H32mqIdYWIY5CY13BW5kjl6GlNtgyMU4jU7vSUKrvYCw/pub?gid=0&single=true&output=csv'; 
             
@@ -215,13 +215,20 @@
                 
                 const textoCsv = await resposta.text();
                 const linhas = textoCsv.trim().split(/\r?\n/);
-                const cabecalho = linhas[0].split(';').map(h => h.trim());
-
+    
+                // CORREÇÃO APLICADA AQUI: Usando um Regex para separar as colunas,
+                // que ignora ponto e vírgulas dentro de aspas duplas.
+                const csvRegex = /;(?=(?:(?:[^"]*"){2})*[^"]*$)/;
+    
+                const cabecalho = linhas[0].split(csvRegex).map(h => h.trim());
+    
                 const dadosJson = linhas.slice(1).map(linha => {
-                    const valores = linha.split(';');
+                    // CORREÇÃO APLICADA AQUI TAMBÉM
+                    const valores = linha.split(csvRegex);
                     const obj = {};
                     cabecalho.forEach((chave, i) => {
                         let valor = valores[i] ? valores[i].trim() : '';
+                        // Remove as aspas do início e do fim, se existirem
                         if (valor.startsWith('"') && valor.endsWith('"')) {
                             valor = valor.substring(1, valor.length - 1);
                         }
@@ -235,13 +242,13 @@
                     return obj;
                 });
                 return dadosJson;
-
+    
             } catch (error) {
                 console.error('Erro ao buscar dados da planilha:', error);
                 return [];
             }
         }
-
+    
         // --- LÓGICA DAS ABAS ---
         function changeTab(tabName) {
             document.querySelectorAll('.tab-button').forEach(button => {
@@ -251,7 +258,7 @@
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
             document.getElementById(`${tabName}-content`).classList.add('active');
         }
-
+    
         // --- RENDERIZAÇÃO ---
         
         // Métricas da Aba 1
@@ -260,20 +267,20 @@
             const thirtyDaysAgo = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 30);
             
             // 1. Taxa de Entrada
-            const newInitiatives = data.filter(p => parseDate(p.data_entrada) >= thirtyDaysAgo);
+            const newInitiatives = data.filter(p => p.data_entrada && parseDate(p.data_entrada) >= thirtyDaysAgo);
             document.getElementById('taxa-entrada-valor').innerText = newInitiatives.length;
-
+    
             // 2. Taxa de Saída
             const completedInitiatives = data.filter(p => p.data_fim && parseDate(p.data_fim) >= thirtyDaysAgo);
             document.getElementById('taxa-saida-valor').innerText = completedInitiatives.length;
-
+    
             // 3. Velocidade (Throughput) - Média mensal
             const completedEver = data.filter(p => p.data_fim);
             const firstCompletion = completedEver.length > 0 ? completedEver.map(p => parseDate(p.data_fim)).sort((a,b) => a - b)[0] : new Date();
             const monthsElapsed = (today.getFullYear() - firstCompletion.getFullYear()) * 12 + (today.getMonth() - firstCompletion.getMonth()) + 1;
             const throughput = completedEver.length / (monthsElapsed || 1);
             document.getElementById('throughput-valor').innerText = `${throughput.toFixed(1)}/mês`;
-
+    
             // 4. Lead Time Médio
             const withLeadTime = data.filter(p => p.data_inicio && p.data_fim);
             const totalLeadTime = withLeadTime.reduce((sum, p) => {
@@ -282,13 +289,13 @@
             }, 0);
             const avgLeadTime = withLeadTime.length > 0 ? totalLeadTime / withLeadTime.length : 0;
             document.getElementById('lead-time-valor').innerText = `${avgLeadTime.toFixed(0)} dias`;
-
+    
             // 5. Cycle Time Médio
             const withCycleTime = data.filter(p => typeof p.cycle_time === 'number');
             const totalCycleTime = withCycleTime.reduce((sum, p) => sum + p.cycle_time, 0);
             const avgCycleTime = withCycleTime.length > 0 ? totalCycleTime / withCycleTime.length : 0;
             document.getElementById('cycle-time-valor').innerText = `${avgCycleTime.toFixed(1)} dias`;
-
+    
             // 6. Backlog Transportado (WIP)
             const wip = data.filter(p => p.data_inicio && !p.data_fim);
             document.getElementById('wip-valor').innerText = wip.length;
@@ -310,7 +317,7 @@
             document.getElementById('aprovacao-valor').innerText = `${approvalRate.toFixed(0)}%`;
             document.getElementById('descarte-valor').innerText = `${rejectionRate.toFixed(0)}%`;
         }
-
+    
         // Gráfico da Aba 1
         function renderComplexityChart() {
             const ctx = document.getElementById('complexityChart').getContext('2d');
@@ -321,7 +328,7 @@
                 else if (score >= 5) acc['Alta Prioridade'] = (acc['Alta Prioridade'] || 0) + 1;
                 return acc;
             }, {});
-
+    
             new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -360,7 +367,7 @@
                 }
             });
         }
-
+    
         // Tabela da Aba 2
         function renderSummaryTable() {
             const tableBody = document.getElementById('projects-table-body');
@@ -372,9 +379,9 @@
                 'Impedido': 'bg-red-500',
                 'Descartado': 'bg-gray-400'
             };
-
+    
             projectsData.forEach(p => {
-                const progressPercentage = (p.progresso * 100).toFixed(0);
+                const progressPercentage = ((p.progresso || 0) * 100).toFixed(0);
                 const row = `
                     <tr class="bg-white border-b hover:bg-gray-50">
                         <td class="px-6 py-4 font-medium text-gray-900">${p.iniciativa}</td>
@@ -401,14 +408,14 @@
                 tableBody.innerHTML += row;
             });
         }
-
+    
         // Matriz da Aba 3
         function renderMatrix(filteredData) {
             const dataToRender = filteredData || projectsData;
             document.querySelectorAll('[id^="cell-"]').forEach(cell => cell.innerHTML = '');
-
+    
             dataToRender.forEach(p => {
-                if (p.fluxo === '99. Descarte') return; 
+                if (p.fluxo === '99. Descarte' || !p.impacto || !p.prioridade) return; 
                 const cell = document.getElementById(`cell-${p.impacto}-${p.prioridade}`);
                 if (cell) {
                     const score = p.impacto + p.prioridade;
@@ -416,7 +423,6 @@
                     if (score <= 3) bgColor = 'bg-blue-200';
                     else if (score === 4) bgColor = 'bg-yellow-200';
                     else if (score >= 5) bgColor = 'bg-green-200';
-                    else if (score >= 6) bgColor = 'bg-red-200';
                     
                     const card = `
                         <div class="p-2 ${bgColor} rounded-md shadow-sm mb-2 text-xs cursor-pointer" title="${p.status}">
@@ -436,24 +442,24 @@
             
             const gps = [...new Set(projectsData.map(p => p.gp))];
             const areas = [...new Set(projectsData.map(p => p.responsavel))];
-
+    
             gps.sort().forEach(gp => {
                 if(gp) gpFilter.innerHTML += `<option>${gp}</option>`;
             });
             areas.sort().forEach(area => {
                 if(area) areaFilter.innerHTML += `<option>${area}</option>`;
             });
-
+    
             document.getElementById('filter-gp').addEventListener('change', applyFilters);
             document.getElementById('filter-area').addEventListener('change', applyFilters);
             document.getElementById('filter-status').addEventListener('change', applyFilters);
         }
-
+    
         function applyFilters() {
             const selectedGp = document.getElementById('filter-gp').value;
             const selectedArea = document.getElementById('filter-area').value;
             const selectedStatus = document.getElementById('filter-status').value;
-
+    
             const filteredData = projectsData.filter(p => {
                 const gpMatch = selectedGp === 'Todos' || p.gp === selectedGp;
                 const areaMatch = selectedArea === 'Todos' || p.responsavel === selectedArea;
@@ -462,11 +468,11 @@
             });
             renderMatrix(filteredData);
         }
-
+    
         // --- INICIALIZAÇÃO ---
         document.addEventListener('DOMContentLoaded', async () => {
             const dadosCarregados = await carregarDadosDaPlanilha();
-
+    
             if (dadosCarregados && dadosCarregados.length > 0) {
                 projectsData = dadosCarregados;
                 
@@ -479,7 +485,7 @@
                  document.querySelector('main').innerHTML = `
                     <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative" role="alert">
                         <strong class="font-bold">Erro ao carregar dados!</strong>
-                        <span class="block sm:inline">Não foi possível buscar as informações da planilha. Verifique se o link está correto e se a planilha está publicada na web como CSV.</span>
+                        <span class="block sm:inline">Não foi possível buscar as informações da planilha. Verifique se o link está correto, se a planilha está publicada na web como CSV e se o delimitador está correto.</span>
                     </div>
                 `;
             }
@@ -487,3 +493,4 @@
     </script>
 </body>
 </html>
+
