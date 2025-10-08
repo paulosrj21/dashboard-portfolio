@@ -6,30 +6,13 @@
     <title>Dashboard de Gestão de Portfólio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        .tab-button.active {
-            border-bottom-color: #3b82f6;
-            color: #3b82f6;
-            font-weight: 600;
-        }
-        .tab-content {
-            display: none;
-        }
-        .tab-content.active {
-            display: block;
-        }
-        .farol-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            display: inline-block;
-        }
+        body { font-family: 'Inter', sans-serif; }
+        .tab-button.active { border-bottom-color: #3b82f6; color: #3b82f6; font-weight: 600; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .farol-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
@@ -40,84 +23,43 @@
             <p class="text-gray-600 mt-1">Visão integrada das iniciativas e métricas de fluxo.</p>
         </header>
 
-        
-
-<div class="border-b border-gray-200 mb-6">
+        <div class="border-b border-gray-200 mb-6">
             <nav class="-mb-px flex space-x-6" aria-label="Tabs">
-                <button onclick="changeTab('metrics')" class="tab-button active whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" data-tab="metrics">
-                    Métricas de Fluxo
-                </button>
-                <button onclick="changeTab('summary')" class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="summary">
-                    Sumário de Projetos
-                </button>
-                <button onclick="changeTab('matrix')" class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="matrix">
-                    Matriz de Priorização
-                </button>
+                <button onclick="changeTab('metrics')" class="tab-button active whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" data-tab="metrics">Métricas de Fluxo</button>
+                <button onclick="changeTab('summary')" class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="summary">Sumário de Projetos</button>
+                <button onclick="changeTab('matrix')" class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="matrix">Matriz de Priorização</button>
             </nav>
         </div>
 
-        
-
-<main>
-            
-
-<div id="metrics-content" class="tab-content active">
+        <main>
+            <!-- ABA DE MÉTRICAS -->
+            <div id="metrics-content" class="tab-content active">
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    
 
-<div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+                    <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
                         <h3 class="text-sm font-medium text-gray-500">Taxa de Entrada</h3>
-                        <p class="mt-2 text-3xl font-bold">18</p>
+                        <p id="taxaEntrada" class="mt-2 text-3xl font-bold">--</p>
                         <p class="text-xs text-gray-400 mt-1">Iniciativas novas ÷ período</p>
-                        <p class="text-xs text-green-600 mt-2">Crescimento de 12% vs. mês anterior.</p>
                     </div>
                     <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
                         <h3 class="text-sm font-medium text-gray-500">Taxa de Saída</h3>
-                        <p class="mt-2 text-3xl font-bold">15</p>
+                        <p id="taxaSaida" class="mt-2 text-3xl font-bold">--</p>
                         <p class="text-xs text-gray-400 mt-1">Iniciativas concluídas ÷ período</p>
-                        <p class="text-xs text-gray-600 mt-2">Acompanhando 83% da taxa de entrada.</p>
-                    </div>
-                    <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
-                        <h3 class="text-sm font-medium text-gray-500">Velocidade (Throughput)</h3>
-                        <p class="mt-2 text-3xl font-bold">14.5/mês</p>
-                        <p class="text-xs text-gray-400 mt-1">Média de entregas / ciclo</p>
-                         <p class="text-xs text-green-600 mt-2">Estável, ideal para projeções futuras.</p>
                     </div>
                     <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
                         <h3 class="text-sm font-medium text-gray-500">Lead Time Médio</h3>
-                        <p class="mt-2 text-3xl font-bold">42 dias</p>
+                        <p id="leadTimeMedio" class="mt-2 text-3xl font-bold">--</p>
                         <p class="text-xs text-gray-400 mt-1">(Data fim – Data início) médio</p>
-                        <p class="text-xs text-red-600 mt-2">Aumento de 5%, revisar gargalos.</p>
                     </div>
                     <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
-                        <h3 class="text-sm font-medium text-gray-500">Cycle Time Médio</h3>
-                        <p class="mt-2 text-3xl font-bold">6 dias/etapa</p>
-                        <p class="text-xs text-gray-400 mt-1">Tempo médio em cada etapa</p>
-                        <p class="text-xs text-gray-600 mt-2">Etapa "Qualificada" com maior tempo.</p>
+                        <h3 class="text-sm font-medium text-gray-500">Aging Médio</h3>
+                        <p id="agingMedio" class="mt-2 text-3xl font-bold">--</p>
+                        <p class="text-xs text-gray-400 mt-1">Média de dias desde a entrada</p>
                     </div>
                     <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
                         <h3 class="text-sm font-medium text-gray-500">Backlog Transportado</h3>
-                        <p class="mt-2 text-3xl font-bold">21</p>
+                        <p id="backlog" class="mt-2 text-3xl font-bold">--</p>
                         <p class="text-xs text-gray-400 mt-1">Iniciativas abertas no fim do mês</p>
-                        <p class="text-xs text-yellow-600 mt-2">Acúmulo gerenciável, mas requer atenção.</p>
-                    </div>
-                    <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
-                        <h3 class="text-sm font-medium text-gray-500">Idade Média (Aging)</h3>
-                        <p class="mt-2 text-3xl font-bold">28 dias</p>
-                        <p class="text-xs text-gray-400 mt-1">Média de dias desde a entrada</p>
-                        <p class="text-xs text-green-600 mt-2">Redução de 10% no envelhecimento.</p>
-                    </div>
-                     <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
-                        <h3 class="text-sm font-medium text-gray-500">Taxa de Aprovação</h3>
-                        <p class="mt-2 text-3xl font-bold">75%</p>
-                        <p class="text-xs text-gray-400 mt-1">Aprovadas ÷ triadas</p>
-                        <p class="text-xs text-gray-600 mt-2">Funil de entrada seletivo e eficaz.</p>
-                    </div>
-                     <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
-                        <h3 class="text-sm font-medium text-gray-500">Taxa de Descarte</h3>
-                        <p class="mt-2 text-3xl font-bold">25%</p>
-                        <p class="text-xs text-gray-400 mt-1">Rejeitadas ÷ triadas</p>
-                        <p class="text-xs text-gray-600 mt-2">Critérios de entrada bem alinhados.</p>
                     </div>
                     <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100 col-span-1 sm:col-span-2 lg:col-span-3">
                         <h3 class="text-sm font-medium text-gray-500">Extrato por Complexidade</h3>
@@ -126,50 +68,45 @@
                 </div>
             </div>
 
-            
-
-<div id="summary-content" class="tab-content">
+            <!-- SUMÁRIO DE PROJETOS -->
+            <div id="summary-content" class="tab-content">
                 <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 overflow-x-auto">
                     <table class="w-full text-sm text-left text-gray-500">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                             <tr>
-                                <th scope="col" class="px-6 py-3">Iniciativa</th>
-                                <th scope="col" class="px-6 py-3">Responsável</th>
-                                <th scope="col" class="px-6 py-3">Fluxo</th>
-                                <th scope="col" class="px-6 py-3">Progresso</th>
-                                <th scope="col" class="px-6 py-3">Farol</th>
-                                <th scope="col" class="px-6 py-3">Status</th>
-                                <th scope="col" class="px-6 py-3">GP</th>
+                                <th class="px-6 py-3">Iniciativa</th>
+                                <th class="px-6 py-3">Responsável</th>
+                                <th class="px-6 py-3">Fluxo</th>
+                                <th class="px-6 py-3">Progresso</th>
+                                <th class="px-6 py-3">Farol</th>
+                                <th class="px-6 py-3">Status</th>
+                                <th class="px-6 py-3">GP</th>
                             </tr>
                         </thead>
-                        <tbody id="projects-table-body">
-                            
-
-</tbody>
+                        <tbody id="projects-table-body"></tbody>
                     </table>
                 </div>
             </div>
 
-            
-
-<div id="matrix-content" class="tab-content">
-                 <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 mb-6">
+            <!-- MATRIZ DE PRIORIZAÇÃO -->
+            <div id="matrix-content" class="tab-content">
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 mb-6">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
                             <label for="filter-gp" class="block text-sm font-medium text-gray-700">Filtrar por GP</label>
-                            <select id="filter-gp" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                            <select id="filter-gp" class="mt-1 block w-full border-gray-300 rounded-md">
                                 <option>Todos</option>
                             </select>
                         </div>
                         <div>
                             <label for="filter-area" class="block text-sm font-medium text-gray-700">Filtrar por Área</label>
-                            <select id="filter-area" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                            <select id="filter-area" class="mt-1 block w-full border-gray-300 rounded-md">
                                 <option>Todos</option>
                             </select>
                         </div>
-                         <div>
+                        <div>
                             <label for="filter-status" class="block text-sm font-medium text-gray-700">Filtrar por Status</label>
-                             <select id="filter-status" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                            <select id="filter-status" class="mt-1 block w-full border-gray-300 rounded-md">
                                 <option>Todos</option>
                                 <option>Em dia</option>
                                 <option>Oportunidade</option>
@@ -181,272 +118,97 @@
                 </div>
 
                 <div class="grid grid-cols-4 gap-1">
-                    
-
-<div class="p-2 text-center font-bold"></div>
-                    <div class="p-2 text-center font-bold text-sm bg-gray-100 rounded-t-lg">Baixa (1)</div>
-                    <div class="p-2 text-center font-bold text-sm bg-gray-100 rounded-t-lg">Média (2)</div>
-                    <div class="p-2 text-center font-bold text-sm bg-gray-100 rounded-t-lg">Alta (3)</div>
-                    
-                    
-
-<div class="p-2 text-center font-bold text-sm bg-gray-100 rounded-l-lg self-center">Forte (3)</div>
-                    <div id="cell-3-1" class="bg-yellow-100 rounded-lg p-3 min-h-[150px] border-2 border-dashed border-yellow-200"></div>
-                    <div id="cell-3-2" class="bg-green-100 rounded-lg p-3 min-h-[150px] border-2 border-dashed border-green-200"></div>
-                    <div id="cell-3-3" class="bg-red-100 rounded-lg p-3 min-h-[150px] border-2 border-dashed border-red-200"></div>
-                    
-                    
-
-<div class="p-2 text-center font-bold text-sm bg-gray-100 rounded-l-lg self-center">Médio (2)</div>
-                    <div id="cell-2-1" class="bg-blue-100 rounded-lg p-3 min-h-[150px] border-2 border-dashed border-blue-200"></div>
-                    <div id="cell-2-2" class="bg-yellow-100 rounded-lg p-3 min-h-[150px] border-2 border-dashed border-yellow-200"></div>
-                    <div id="cell-2-3" class="bg-green-100 rounded-lg p-3 min-h-[150px] border-2 border-dashed border-green-200"></div>
-                    
-                    
-
-<div class="p-2 text-center font-bold text-sm bg-gray-100 rounded-l-lg self-center">Fraco (1)</div>
-                    <div id="cell-1-1" class="bg-gray-200 rounded-lg p-3 min-h-[150px] border-2 border-dashed border-gray-300"></div>
-                    <div id="cell-1-2" class="bg-blue-100 rounded-lg p-3 min-h-[150px] border-2 border-dashed border-blue-200"></div>
-                    <div id="cell-1-3" class="bg-yellow-100 rounded-lg p-3 min-h-[150px] border-2 border-dashed border-yellow-200"></div>
+                    <div></div>
+                    <div class="text-center font-bold text-sm bg-gray-100 rounded-t-lg">Baixa (1)</div>
+                    <div class="text-center font-bold text-sm bg-gray-100 rounded-t-lg">Média (2)</div>
+                    <div class="text-center font-bold text-sm bg-gray-100 rounded-t-lg">Alta (3)</div>
+                    <div class="text-center font-bold text-sm bg-gray-100 rounded-l-lg">Forte (3)</div>
+                    <div id="cell-3-1" class="bg-yellow-100 p-3 min-h-[150px] border-2 border-dashed border-yellow-200 rounded-lg"></div>
+                    <div id="cell-3-2" class="bg-green-100 p-3 min-h-[150px] border-2 border-dashed border-green-200 rounded-lg"></div>
+                    <div id="cell-3-3" class="bg-red-100 p-3 min-h-[150px] border-2 border-dashed border-red-200 rounded-lg"></div>
                 </div>
             </div>
         </main>
     </div>
 
-    <script>
-        // --- DADOS ---
-        // Esta variável global será preenchida com os dados da planilha.
-        let projectsData = [];
+<script>
+let projectsData = [];
 
-        async function carregarDadosDaPlanilha() {
-            const urlPlanilha = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQBgoOo6EBhtoY_n3pkqoUHLNDJtrFx0j_9H32mqIdYWIY5CY13BW5kjl6GlNtgyMU4jU7vSUKrvYCw/pub?gid=0&single=true&output=csv'; 
-            
-            try {
-                const resposta = await fetch(urlPlanilha);
-                if (!resposta.ok) {
-                    throw new Error(`Erro na rede: ${resposta.statusText}`);
-                }
-                const textoCsv = await resposta.text();
-                
-                // Converte o CSV para JSON de forma mais robusta, lidando com vírgulas dentro dos campos
-                const linhas = textoCsv.trim().split(/\r?\n/);
-                const cabecalho = linhas[0].split(',').map(h => h.trim());
-                
-                // Regex para separar por vírgulas, mas ignorar vírgulas dentro de aspas duplas
-                const csvRegex = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/;
+async function carregarDadosDaPlanilha() {
+    const urlPlanilha = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQBgoOo6EBhtoY_n3pkqoUHLNDJtrFx0j_9H32mqIdYWIY5CY13BW5kjl6GlNtgyMU4jU7vSUKrvYCw/pub?gid=0&single=true&output=csv';
+    const resposta = await fetch(urlPlanilha);
+    const textoCsv = await resposta.text();
+    const linhas = textoCsv.trim().split(/\r?\n/);
+    const cabecalho = linhas[0].split(';').map(h => h.trim());
+    return linhas.slice(1).map(l => {
+        const valores = l.split(';');
+        const obj = {};
+        cabecalho.forEach((c, i) => obj[c] = valores[i]?.trim());
+        return obj;
+    });
+}
 
-                const dadosJson = linhas.slice(1).map(linha => {
-                    const valores = linha.split(csvRegex);
-                    const obj = {};
-                    cabecalho.forEach((chave, i) => {
-                        let valor = valores[i] ? valores[i].trim() : '';
+function calcularMetricas(dados) {
+    const hoje = new Date();
+    const taxaEntrada = dados.filter(d => d.status === 'Novo').length;
+    const taxaSaida = dados.filter(d => d.status === 'Concluído').length;
+    const backlog = dados.filter(d => d.status !== 'Concluído').length;
 
-                        // Remove as aspas do início e do fim, se existirem
-                        if (valor.startsWith('"') && valor.endsWith('"')) {
-                            valor = valor.substring(1, valor.length - 1);
-                        }
-                        
-                        const colunasNumericas = ['id', 'progresso', 'prioridade', 'impacto'];
-                        if (colunasNumericas.includes(chave) && valor !== '' && !isNaN(Number(valor))) {
-                            obj[chave] = Number(valor);
-                        } else {
-                            obj[chave] = valor;
-                        }
-                    });
-                    return obj;
-                });
+    const leadTimes = dados.filter(d => d.data_inicio && d.data_fim)
+        .map(d => (new Date(d.data_fim) - new Date(d.data_inicio)) / (1000 * 60 * 60 * 24));
+    const leadTimeMedio = leadTimes.length ? (leadTimes.reduce((a, b) => a + b) / leadTimes.length).toFixed(1) : 0;
 
-                return dadosJson;
+    const aging = dados.filter(d => d.data_entrada)
+        .map(d => (hoje - new Date(d.data_entrada)) / (1000 * 60 * 60 * 24));
+    const agingMedio = aging.length ? (aging.reduce((a, b) => a + b) / aging.length).toFixed(1) : 0;
 
-            } catch (error) {
-                console.error('Erro ao buscar dados da planilha:', error);
-                return []; // Retorna um array vazio em caso de erro
-            }
-        }
+    return { taxaEntrada, taxaSaida, backlog, leadTimeMedio, agingMedio };
+}
 
-        // --- LÓGICA DAS ABAS ---
-        function changeTab(tabName) {
-            document.querySelectorAll('.tab-button').forEach(button => {
-                button.classList.remove('active');
-                if (button.dataset.tab === tabName) {
-                    button.classList.add('active');
-                }
-            });
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            document.getElementById(`${tabName}-content`).classList.add('active');
-        }
+function renderComplexityChart() {
+    const ctx = document.getElementById('complexityChart').getContext('2d');
+    const projectCounts = projectsData.reduce((acc, p) => {
+        const score = (parseInt(p.prioridade) || 0) + (parseInt(p.impacto) || 0);
+        if (score <= 3) acc['Baixa Relevância'] = (acc['Baixa Relevância'] || 0) + 1;
+        else if (score === 4) acc['Oportunidade Tática'] = (acc['Oportunidade Tática'] || 0) + 1;
+        else acc['Alta Prioridade'] = (acc['Alta Prioridade'] || 0) + 1;
+        return acc;
+    }, {});
 
-        // --- RENDERIZAÇÃO ---
-        
-        // Gráfico da Aba 1
-        function renderComplexityChart() {
-            const ctx = document.getElementById('complexityChart').getContext('2d');
-            const projectCounts = projectsData.reduce((acc, p) => {
-                const score = p.prioridade + p.impacto;
-                if (score <= 3) acc['Baixa Relevância'] = (acc['Baixa Relevância'] || 0) + 1;
-                else if (score === 4) acc['Oportunidade Tática'] = (acc['Oportunidade Tática'] || 0) + 1;
-                else if (score >= 5) acc['Alta Prioridade'] = (acc['Alta Prioridade'] || 0) + 1;
-                return acc;
-            }, {});
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: Object.keys(projectCounts),
+            datasets: [{
+                label: 'Nº de Iniciativas',
+                data: Object.values(projectCounts),
+                backgroundColor: ['#9CA3AF', '#FBBF24', '#3B82F6']
+            }]
+        },
+        options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+    });
+}
 
-            new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: Object.keys(projectCounts),
-                    datasets: [{
-                        label: 'Nº de Iniciativas',
-                        data: Object.values(projectCounts),
-                        backgroundColor: [
-                            'rgba(156, 163, 175, 0.7)',
-                            'rgba(251, 191, 36, 0.7)',
-                            'rgba(59, 130, 246, 0.7)',
-                        ],
-                        borderColor: [
-                            'rgba(156, 163, 175, 1)',
-                            'rgba(251, 191, 36, 1)',
-                            'rgba(59, 130, 246, 1)',
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        },
-                        title: {
-                            display: false
-                        }
-                    }
-                }
-            });
-        }
+function atualizarMetricas(m) {
+    document.getElementById('taxaEntrada').textContent = m.taxaEntrada;
+    document.getElementById('taxaSaida').textContent = m.taxaSaida;
+    document.getElementById('leadTimeMedio').textContent = `${m.leadTimeMedio} dias`;
+    document.getElementById('agingMedio').textContent = `${m.agingMedio} dias`;
+    document.getElementById('backlog').textContent = m.backlog;
+}
 
-        // Tabela da Aba 2
-        function renderSummaryTable() {
-            const tableBody = document.getElementById('projects-table-body');
-            tableBody.innerHTML = '';
-            const farolColors = {
-                'Em dia': 'bg-green-500',
-                'Oportunidade': 'bg-blue-500',
-                'Atenção': 'bg-yellow-400',
-                'Impedido': 'bg-red-500',
-                'Descartado': 'bg-gray-400'
-            };
+function changeTab(tabName) {
+    document.querySelectorAll('.tab-button').forEach(b => { b.classList.remove('active'); if (b.dataset.tab === tabName) b.classList.add('active'); });
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.getElementById(`${tabName}-content`).classList.add('active');
+}
 
-            projectsData.forEach(p => {
-                const progressPercentage = (p.progresso * 100).toFixed(0);
-                const row = `
-                    <tr class="bg-white border-b hover:bg-gray-50">
-                        <td class="px-6 py-4 font-medium text-gray-900">${p.iniciativa}</td>
-                        <td class="px-6 py-4">${p.responsavel}</td>
-                        <td class="px-6 py-4">${p.fluxo}</td>
-                        <td class="px-6 py-4">
-                            <div class="flex items-center">
-                                <div class="w-full bg-gray-200 rounded-full h-2.5 mr-2">
-                                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: ${progressPercentage}%"></div>
-                                </div>
-                                <span>${progressPercentage}%</span>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4">
-                            <div class="flex items-center">
-                                <span class="farol-dot ${farolColors[p.farol] || 'bg-gray-300'} mr-2"></span>
-                                ${p.farol}
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 text-xs">${p.status}</td>
-                        <td class="px-6 py-4">${p.gp}</td>
-                    </tr>
-                `;
-                tableBody.innerHTML += row;
-            });
-        }
-
-        // Matriz da Aba 3
-        function renderMatrix(filteredData) {
-            const dataToRender = filteredData || projectsData;
-            document.querySelectorAll('[id^="cell-"]').forEach(cell => cell.innerHTML = '');
-
-            dataToRender.forEach(p => {
-                if (p.fluxo === '99. Descarte') return; 
-                const cell = document.getElementById(`cell-${p.impacto}-${p.prioridade}`);
-                if (cell) {
-                    const score = p.impacto + p.prioridade;
-                    let bgColor = 'bg-gray-200';
-                    if (score <= 3) bgColor = 'bg-blue-200';
-                    else if (score === 4) bgColor = 'bg-yellow-200';
-                    else if (score >= 5) bgColor = 'bg-green-200';
-                    else if (score >= 6) bgColor = 'bg-red-200';
-                    
-                    const card = `
-                        <div class="p-2 ${bgColor} rounded-md shadow-sm mb-2 text-xs cursor-pointer" title="${p.status}">
-                            <p class="font-bold truncate">${p.iniciativa}</p>
-                            <p class="text-gray-600">${p.gp} / ${p.responsavel}</p>
-                        </div>
-                    `;
-                    cell.innerHTML += card;
-                }
-            });
-        }
-        
-        // --- FILTROS ---
-        function setupFilters() {
-            const gpFilter = document.getElementById('filter-gp');
-            const areaFilter = document.getElementById('filter-area');
-            
-            const gps = [...new Set(projectsData.map(p => p.gp))];
-            const areas = [...new Set(projectsData.map(p => p.responsavel))];
-
-            gps.sort().forEach(gp => {
-                gpFilter.innerHTML += `<option>${gp}</option>`;
-            });
-            areas.sort().forEach(area => {
-                areaFilter.innerHTML += `<option>${area}</option>`;
-            });
-
-            document.getElementById('filter-gp').addEventListener('change', applyFilters);
-            document.getElementById('filter-area').addEventListener('change', applyFilters);
-            document.getElementById('filter-status').addEventListener('change', applyFilters);
-        }
-
-        function applyFilters() {
-            const selectedGp = document.getElementById('filter-gp').value;
-            const selectedArea = document.getElementById('filter-area').value;
-            const selectedStatus = document.getElementById('filter-status').value;
-
-            const filteredData = projectsData.filter(p => {
-                const gpMatch = selectedGp === 'Todos' || p.gp === selectedGp;
-                const areaMatch = selectedArea === 'Todos' || p.responsavel === selectedArea;
-                const statusMatch = selectedStatus === 'Todos' || p.farol === selectedStatus;
-                return gpMatch && areaMatch && statusMatch;
-            });
-            renderMatrix(filteredData);
-        }
-
-        // --- INICIALIZAÇÃO ---
-        document.addEventListener('DOMContentLoaded', async () => {
-            const dadosCarregados = await carregarDadosDaPlanilha();
-
-            if (dadosCarregados && dadosCarregados.length > 0) {
-                projectsData = dadosCarregados;
-                
-                renderComplexityChart();
-                renderSummaryTable();
-                setupFilters();
-                applyFilters(); // Renderiza a matriz com os filtros iniciais
-            } else {
-                 document.querySelector('main').innerHTML = `
-                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative" role="alert">
-                        <strong class="font-bold">Erro ao carregar dados!</strong>
-                        <span class="block sm:inline">Não foi possível buscar as informações da planilha. Verifique se o link está correto e se a planilha está publicada na web como CSV.</span>
-                    </div>
-                `;
-            }
-        });
-    </script>
+document.addEventListener('DOMContentLoaded', async () => {
+    projectsData = await carregarDadosDaPlanilha();
+    const metricas = calcularMetricas(projectsData);
+    atualizarMetricas(metricas);
+    renderComplexityChart();
+});
+</script>
 </body>
 </html>
