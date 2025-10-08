@@ -134,19 +134,52 @@
 <script>
 let projectsData = [];
 
-async function carregarDadosDaPlanilha() {
-    const urlPlanilha = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQBgoOo6EBhtoY_n3pkqoUHLNDJtrFx0j_9H32mqIdYWIY5CY13BW5kjl6GlNtgyMU4jU7vSUKrvYCw/pub?gid=0&single=true&output=csv';
-    const resposta = await fetch(urlPlanilha);
-    const textoCsv = await resposta.text();
-    const linhas = textoCsv.trim().split(/\r?\n/);
-    const cabecalho = linhas[0].split(',').map(h => h.trim());
-    return linhas.slice(1).map(l => {
-        const valores = l.split(';');
-        const obj = {};
-        cabecalho.forEach((c, i) => obj[c] = valores[i]?.trim());
-        return obj;
-    });
-}
+        async function carregarDadosDaPlanilha() {
+            const urlPlanilha = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQBgoOo6EBhtoY_n3pkqoUHLNDJtrFx0j_9H32mqIdYWIY5CY13BW5kjl6GlNtgyMU4jU7vSUKrvYCw/pub?gid=0&single=true&output=csv'; 
+            
+            try {
+                const resposta = await fetch(urlPlanilha);
+                if (!resposta.ok) {
+                    throw new Error(`Erro na rede: ${resposta.statusText}`);
+                }
+                const textoCsv = await resposta.text();
+                
+                // Converte o CSV para JSON de forma mais robusta, lidando com vírgulas dentro dos campos
+                const linhas = textoCsv.trim().split(/\r?\n/);
+                const cabecalho = linhas[0].split(',').map(h => h.trim());
+                
+                // Regex para separar por vírgulas, mas ignorar vírgulas dentro de aspas duplas
+                const csvRegex = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/;
+
+                const dadosJson = linhas.slice(1).map(linha => {
+                    const valores = linha.split(csvRegex);
+                    const obj = {};
+                    cabecalho.forEach((chave, i) => {
+                        let valor = valores[i] ? valores[i].trim() : '';
+
+                        // Remove as aspas do início e do fim, se existirem
+                        if (valor.startsWith('"') && valor.endsWith('"')) {
+                            valor = valor.substring(1, valor.length - 1);
+                        }
+                        
+                        const colunasNumericas = ['id', 'progresso', 'prioridade', 'impacto'];
+                        if (colunasNumericas.includes(chave) && valor !== '' && !isNaN(Number(valor))) {
+                            obj[chave] = Number(valor);
+                        } else {
+                            obj[chave] = valor;
+                        }
+                    });
+                    return obj;
+                });
+
+                return dadosJson;
+
+            } catch (error) {
+                console.error('Erro ao buscar dados da planilha:', error);
+                return []; // Retorna um array vazio em caso de erro
+            }
+        }
+
 
 function calcularMetricas(dados) {
     const hoje = new Date();
