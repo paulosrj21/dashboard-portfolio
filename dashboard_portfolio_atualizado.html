@@ -158,9 +158,30 @@ async function carregarDadosDaPlanilha() {
 
 function calcularMetricas(dados) {
     const hoje = new Date();
-    const taxaEntrada = dados.filter(d => d.status === 'Novo').length;
-    const taxaSaida = dados.filter(d => d.status === 'Concluído').length;
-    const backlog = dados.filter(d => d.status !== 'Concluído').length;
+    const mesAtual = hoje.getMonth();
+    const anoAtual = hoje.getFullYear();
+    
+    const taxaEntrada = dados.filter(d => {
+      if (!d.data_entrada) return false;
+      const entrada = new Date(d.data_entrada);
+      return entrada.getMonth() === mesAtual && entrada.getFullYear() === anoAtual;
+    }).length;
+    
+    const taxaSaida = dados.filter(d => {
+      if (!d.data_fim) return false;
+      const fim = new Date(d.data_fim);
+      return fim.getMonth() === mesAtual && fim.getFullYear() === anoAtual;
+    }).length;
+
+    const backlog = dados.filter(d => {
+      const entrada = d.data_entrada ? new Date(d.data_entrada) : null;
+      const fim = d.data_fim ? new Date(d.data_fim) : null;
+      return entrada && (!fim || fim > hoje);
+    }).length;
+
+    // const taxaEntrada = dados.filter(d => d.status === 'Novo').length;
+    // const taxaSaida = dados.filter(d => d.status === 'Concluído').length;
+    // const backlog = dados.filter(d => d.status !== 'Concluído').length;
 
     const leadTimes = dados.filter(d => d.data_inicio && d.data_fim)
         .map(d => (new Date(d.data_fim) - new Date(d.data_inicio)) / (1000 * 60 * 60 * 24));
