@@ -79,42 +79,28 @@
 
             <!-- MATRIZ DE PRIORIZAÇÃO -->
             <div id="matrix-content" class="tab-content">
-                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 mb-6">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div>
-                            <label for="filter-gp" class="block text-sm font-medium text-gray-700">Filtrar por GP</label>
-                            <select id="filter-gp" class="mt-1 block w-full border-gray-300 rounded-md">
-                                <option>Todos</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="filter-area" class="block text-sm font-medium text-gray-700">Filtrar por Área</label>
-                            <select id="filter-area" class="mt-1 block w-full border-gray-300 rounded-md">
-                                <option>Todos</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="filter-status" class="block text-sm font-medium text-gray-700">Filtrar por Status</label>
-                            <select id="filter-status" class="mt-1 block w-full border-gray-300 rounded-md">
-                                <option>Todos</option>
-                                <option>Em dia</option>
-                                <option>Oportunidade</option>
-                                <option>Atenção</option>
-                                <option>Impedido</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 overflow-x-auto">
+                    <div class="grid grid-cols-4 gap-1 min-w-[600px]">
+                        <div></div>
+                        <div class="text-center font-bold text-sm bg-gray-100 rounded-t-lg">Baixa (1)</div>
+                        <div class="text-center font-bold text-sm bg-gray-100 rounded-t-lg">Média (2)</div>
+                        <div class="text-center font-bold text-sm bg-gray-100 rounded-t-lg">Alta (3)</div>
 
-                <div class="grid grid-cols-4 gap-1">
-                    <div></div>
-                    <div class="text-center font-bold text-sm bg-gray-100 rounded-t-lg">Baixa (1)</div>
-                    <div class="text-center font-bold text-sm bg-gray-100 rounded-t-lg">Média (2)</div>
-                    <div class="text-center font-bold text-sm bg-gray-100 rounded-t-lg">Alta (3)</div>
-                    <div class="text-center font-bold text-sm bg-gray-100 rounded-l-lg">Forte (3)</div>
-                    <div id="cell-3-1" class="bg-yellow-100 p-3 min-h-[150px] border-2 border-dashed border-yellow-200 rounded-lg"></div>
-                    <div id="cell-3-2" class="bg-green-100 p-3 min-h-[150px] border-2 border-dashed border-green-200 rounded-lg"></div>
-                    <div id="cell-3-3" class="bg-red-100 p-3 min-h-[150px] border-2 border-dashed border-red-200 rounded-lg"></div>
+                        <div class="text-center font-bold text-sm bg-gray-100 rounded-l-lg">Forte (3)</div>
+                        <div id="cell-3-1" class="bg-yellow-100 p-3 min-h-[150px] border-2 border-dashed border-yellow-200 rounded-lg"></div>
+                        <div id="cell-3-2" class="bg-green-100 p-3 min-h-[150px] border-2 border-dashed border-green-200 rounded-lg"></div>
+                        <div id="cell-3-3" class="bg-red-100 p-3 min-h-[150px] border-2 border-dashed border-red-200 rounded-lg"></div>
+
+                        <div class="text-center font-bold text-sm bg-gray-100 rounded-l-lg">Médio (2)</div>
+                        <div id="cell-2-1" class="bg-blue-100 p-3 min-h-[150px] border-2 border-dashed border-blue-200 rounded-lg"></div>
+                        <div id="cell-2-2" class="bg-yellow-100 p-3 min-h-[150px] border-2 border-dashed border-yellow-200 rounded-lg"></div>
+                        <div id="cell-2-3" class="bg-green-100 p-3 min-h-[150px] border-2 border-dashed border-green-200 rounded-lg"></div>
+
+                        <div class="text-center font-bold text-sm bg-gray-100 rounded-l-lg">Fraco (1)</div>
+                        <div id="cell-1-1" class="bg-gray-200 p-3 min-h-[150px] border-2 border-dashed border-gray-300 rounded-lg"></div>
+                        <div id="cell-1-2" class="bg-blue-100 p-3 min-h-[150px] border-2 border-dashed border-blue-200 rounded-lg"></div>
+                        <div id="cell-1-3" class="bg-yellow-100 p-3 min-h-[150px] border-2 border-dashed border-yellow-200 rounded-lg"></div>
+                    </div>
                 </div>
             </div>
         </main>
@@ -165,8 +151,17 @@ function atualizarMetricas(m) {
 function renderSummaryTable() {
     const tableBody = document.getElementById('projects-table-body');
     tableBody.innerHTML = '';
+    const farolColors = {
+        'Em dia': 'bg-green-500',
+        'Oportunidade': 'bg-blue-500',
+        'Atenção': 'bg-yellow-400',
+        'Impedido': 'bg-red-500',
+        'Descartado': 'bg-gray-400'
+    };
+
     projectsData.forEach(p => {
         const progressPercentage = (parseFloat(p.progresso) * 100 || 0).toFixed(0);
+        const farolColor = farolColors[p.farol] || 'bg-gray-300';
         const row = `
             <tr class="bg-white border-b hover:bg-gray-50">
                 <td class="px-6 py-4 font-medium text-gray-900">${p.iniciativa}</td>
@@ -180,11 +175,31 @@ function renderSummaryTable() {
                         <span>${progressPercentage}%</span>
                     </div>
                 </td>
-                <td class="px-6 py-4">${p.farol}</td>
+                <td class="px-6 py-4">
+                    <div class="flex items-center">
+                        <span class="farol-dot ${farolColor} mr-2"></span>
+                        ${p.farol}
+                    </div>
+                </td>
                 <td class="px-6 py-4 text-xs">${p.status}</td>
                 <td class="px-6 py-4">${p.gp}</td>
             </tr>`;
         tableBody.innerHTML += row;
+    });
+}
+
+function renderMatrix() {
+    document.querySelectorAll('[id^="cell-"]').forEach(cell => cell.innerHTML = '');
+
+    projectsData.forEach(p => {
+        const impacto = parseInt(p.impacto);
+        const prioridade = parseInt(p.prioridade);
+        if (!impacto || !prioridade) return;
+        const cell = document.getElementById(`cell-${impacto}-${prioridade}`);
+        if (cell) {
+            const card = `<div class='bg-white p-2 rounded shadow text-xs mb-2'><p class='font-semibold truncate'>${p.iniciativa}</p><p>${p.gp} / ${p.responsavel}</p></div>`;
+            cell.innerHTML += card;
+        }
     });
 }
 
@@ -193,6 +208,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const metricas = calcularMetricas(projectsData);
     atualizarMetricas(metricas);
     renderSummaryTable();
+    renderMatrix();
 });
 
 function changeTab(tabName) {
