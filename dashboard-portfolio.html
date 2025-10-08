@@ -40,7 +40,9 @@
             <p class="text-gray-600 mt-1">Visão integrada das iniciativas e métricas de fluxo.</p>
         </header>
 
-        <div class="border-b border-gray-200 mb-6">
+        
+
+<div class="border-b border-gray-200 mb-6">
             <nav class="-mb-px flex space-x-6" aria-label="Tabs">
                 <button onclick="changeTab('metrics')" class="tab-button active whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" data-tab="metrics">
                     Métricas de Fluxo
@@ -54,71 +56,79 @@
             </nav>
         </div>
 
-        <main>
-            <div id="metrics-content" class="tab-content active">
+        
+
+<main>
+            
+
+<div id="metrics-content" class="tab-content active">
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+                    
+
+<div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
                         <h3 class="text-sm font-medium text-gray-500">Taxa de Entrada</h3>
-                        <p id="taxa-entrada-valor" class="mt-2 text-3xl font-bold">-</p>
+                        <p class="mt-2 text-3xl font-bold">18</p>
                         <p class="text-xs text-gray-400 mt-1">Iniciativas novas ÷ período</p>
-                        <p id="taxa-entrada-desc" class="text-xs text-gray-600 mt-2">Novas iniciativas (últimos 30 dias).</p>
+                        <p class="text-xs text-green-600 mt-2">Crescimento de 12% vs. mês anterior.</p>
                     </div>
                     <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
                         <h3 class="text-sm font-medium text-gray-500">Taxa de Saída</h3>
-                        <p id="taxa-saida-valor" class="mt-2 text-3xl font-bold">-</p>
+                        <p class="mt-2 text-3xl font-bold">15</p>
                         <p class="text-xs text-gray-400 mt-1">Iniciativas concluídas ÷ período</p>
-                        <p id="taxa-saida-desc" class="text-xs text-gray-600 mt-2">Iniciativas concluídas (últimos 30 dias).</p>
+                        <p class="text-xs text-gray-600 mt-2">Acompanhando 83% da taxa de entrada.</p>
                     </div>
                     <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
                         <h3 class="text-sm font-medium text-gray-500">Velocidade (Throughput)</h3>
-                        <p id="throughput-valor" class="mt-2 text-3xl font-bold">-</p>
+                        <p class="mt-2 text-3xl font-bold">14.5/mês</p>
                         <p class="text-xs text-gray-400 mt-1">Média de entregas / ciclo</p>
-                         <p id="throughput-desc" class="text-xs text-gray-600 mt-2">Média mensal de entregas.</p>
+                         <p class="text-xs text-green-600 mt-2">Estável, ideal para projeções futuras.</p>
                     </div>
                     <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
                         <h3 class="text-sm font-medium text-gray-500">Lead Time Médio</h3>
-                        <p id="lead-time-valor" class="mt-2 text-3xl font-bold">-</p>
+                        <p class="mt-2 text-3xl font-bold">42 dias</p>
                         <p class="text-xs text-gray-400 mt-1">(Data fim – Data início) médio</p>
-                        <p id="lead-time-desc" class="text-xs text-gray-600 mt-2">Tempo médio do início ao fim.</p>
+                        <p class="text-xs text-red-600 mt-2">Aumento de 5%, revisar gargalos.</p>
                     </div>
                     <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
                         <h3 class="text-sm font-medium text-gray-500">Cycle Time Médio</h3>
-                        <p id="cycle-time-valor" class="mt-2 text-3xl font-bold">-</p>
+                        <p class="mt-2 text-3xl font-bold">6 dias/etapa</p>
                         <p class="text-xs text-gray-400 mt-1">Tempo médio em cada etapa</p>
-                        <p id="cycle-time-desc" class="text-xs text-gray-600 mt-2">Média da coluna 'cycle_time'.</p>
+                        <p class="text-xs text-gray-600 mt-2">Etapa "Qualificada" com maior tempo.</p>
                     </div>
                     <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
-                        <h3 class="text-sm font-medium text-gray-500">Backlog Transportado (WIP)</h3>
-                        <p id="wip-valor" class="mt-2 text-3xl font-bold">-</p>
+                        <h3 class="text-sm font-medium text-gray-500">Backlog Transportado</h3>
+                        <p class="mt-2 text-3xl font-bold">21</p>
                         <p class="text-xs text-gray-400 mt-1">Iniciativas abertas no fim do mês</p>
-                        <p id="wip-desc" class="text-xs text-gray-600 mt-2">Total de iniciativas em andamento.</p>
+                        <p class="text-xs text-yellow-600 mt-2">Acúmulo gerenciável, mas requer atenção.</p>
                     </div>
                     <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
                         <h3 class="text-sm font-medium text-gray-500">Idade Média (Aging)</h3>
-                        <p id="aging-valor" class="mt-2 text-3xl font-bold">-</p>
+                        <p class="mt-2 text-3xl font-bold">28 dias</p>
                         <p class="text-xs text-gray-400 mt-1">Média de dias desde a entrada</p>
-                        <p id="aging-desc" class="text-xs text-gray-600 mt-2">Para itens ainda não concluídos.</p>
+                        <p class="text-xs text-green-600 mt-2">Redução de 10% no envelhecimento.</p>
                     </div>
                      <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
                         <h3 class="text-sm font-medium text-gray-500">Taxa de Aprovação</h3>
-                        <p id="aprovacao-valor" class="mt-2 text-3xl font-bold">-</p>
+                        <p class="mt-2 text-3xl font-bold">75%</p>
                         <p class="text-xs text-gray-400 mt-1">Aprovadas ÷ triadas</p>
-                        <p id="aprovacao-desc" class="text-xs text-gray-600 mt-2">Percentual de iniciativas aprovadas.</p>
+                        <p class="text-xs text-gray-600 mt-2">Funil de entrada seletivo e eficaz.</p>
                     </div>
                      <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
                         <h3 class="text-sm font-medium text-gray-500">Taxa de Descarte</h3>
-                        <p id="descarte-valor" class="mt-2 text-3xl font-bold">-</p>
+                        <p class="mt-2 text-3xl font-bold">25%</p>
                         <p class="text-xs text-gray-400 mt-1">Rejeitadas ÷ triadas</p>
-                        <p id="descarte-desc" class="text-xs text-gray-600 mt-2">Percentual de iniciativas descartadas.</p>
+                        <p class="text-xs text-gray-600 mt-2">Critérios de entrada bem alinhados.</p>
                     </div>
-                    <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100 col-span-1 sm:col-span-2 lg:col-span-2">
-                        <h3 class="text-sm font-medium text-gray-500">Extrato por Relevância</h3>
+                    <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100 col-span-1 sm:col-span-2 lg:col-span-3">
+                        <h3 class="text-sm font-medium text-gray-500">Extrato por Complexidade</h3>
                         <canvas id="complexityChart" class="mt-4"></canvas>
                     </div>
                 </div>
             </div>
 
-            <div id="summary-content" class="tab-content">
+            
+
+<div id="summary-content" class="tab-content">
                 <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 overflow-x-auto">
                     <table class="w-full text-sm text-left text-gray-500">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50">
@@ -133,12 +143,16 @@
                             </tr>
                         </thead>
                         <tbody id="projects-table-body">
-                        </tbody>
+                            
+
+</tbody>
                     </table>
                 </div>
             </div>
 
-            <div id="matrix-content" class="tab-content">
+            
+
+<div id="matrix-content" class="tab-content">
                  <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 mb-6">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
@@ -167,22 +181,30 @@
                 </div>
 
                 <div class="grid grid-cols-4 gap-1">
-                    <div class="p-2 text-center font-bold"></div>
+                    
+
+<div class="p-2 text-center font-bold"></div>
                     <div class="p-2 text-center font-bold text-sm bg-gray-100 rounded-t-lg">Baixa (1)</div>
                     <div class="p-2 text-center font-bold text-sm bg-gray-100 rounded-t-lg">Média (2)</div>
                     <div class="p-2 text-center font-bold text-sm bg-gray-100 rounded-t-lg">Alta (3)</div>
                     
-                    <div class="p-2 text-center font-bold text-sm bg-gray-100 rounded-l-lg self-center">Forte (3)</div>
+                    
+
+<div class="p-2 text-center font-bold text-sm bg-gray-100 rounded-l-lg self-center">Forte (3)</div>
                     <div id="cell-3-1" class="bg-yellow-100 rounded-lg p-3 min-h-[150px] border-2 border-dashed border-yellow-200"></div>
                     <div id="cell-3-2" class="bg-green-100 rounded-lg p-3 min-h-[150px] border-2 border-dashed border-green-200"></div>
                     <div id="cell-3-3" class="bg-red-100 rounded-lg p-3 min-h-[150px] border-2 border-dashed border-red-200"></div>
                     
-                    <div class="p-2 text-center font-bold text-sm bg-gray-100 rounded-l-lg self-center">Médio (2)</div>
+                    
+
+<div class="p-2 text-center font-bold text-sm bg-gray-100 rounded-l-lg self-center">Médio (2)</div>
                     <div id="cell-2-1" class="bg-blue-100 rounded-lg p-3 min-h-[150px] border-2 border-dashed border-blue-200"></div>
                     <div id="cell-2-2" class="bg-yellow-100 rounded-lg p-3 min-h-[150px] border-2 border-dashed border-yellow-200"></div>
                     <div id="cell-2-3" class="bg-green-100 rounded-lg p-3 min-h-[150px] border-2 border-dashed border-green-200"></div>
                     
-                    <div class="p-2 text-center font-bold text-sm bg-gray-100 rounded-l-lg self-center">Fraco (1)</div>
+                    
+
+<div class="p-2 text-center font-bold text-sm bg-gray-100 rounded-l-lg self-center">Fraco (1)</div>
                     <div id="cell-1-1" class="bg-gray-200 rounded-lg p-3 min-h-[150px] border-2 border-dashed border-gray-300"></div>
                     <div id="cell-1-2" class="bg-blue-100 rounded-lg p-3 min-h-[150px] border-2 border-dashed border-blue-200"></div>
                     <div id="cell-1-3" class="bg-yellow-100 rounded-lg p-3 min-h-[150px] border-2 border-dashed border-yellow-200"></div>
@@ -192,47 +214,39 @@
     </div>
 
     <script>
-    // --- DADOS ---
+        // --- DADOS ---
+        // Esta variável global será preenchida com os dados da planilha.
         let projectsData = [];
-    
-        // Função para converter data DD/MM/YYYY para um objeto Date
-        function parseDate(dateStr) {
-            if (!dateStr || typeof dateStr !== 'string') return null;
-            const parts = dateStr.split('/');
-            if (parts.length === 3) {
-                // Formato DD/MM/YYYY
-                return new Date(parts[2], parts[1] - 1, parts[0]);
-            }
-            return new Date(dateStr); // Tenta formato padrão
-        }
-    
+
         async function carregarDadosDaPlanilha() {
             const urlPlanilha = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQBgoOo6EBhtoY_n3pkqoUHLNDJtrFx0j_9H32mqIdYWIY5CY13BW5kjl6GlNtgyMU4jU7vSUKrvYCw/pub?gid=0&single=true&output=csv'; 
             
             try {
                 const resposta = await fetch(urlPlanilha);
-                if (!resposta.ok) throw new Error(`Erro na rede: ${resposta.statusText}`);
-                
+                if (!resposta.ok) {
+                    throw new Error(`Erro na rede: ${resposta.statusText}`);
+                }
                 const textoCsv = await resposta.text();
+                
+                // Converte o CSV para JSON de forma mais robusta, lidando com vírgulas dentro dos campos
                 const linhas = textoCsv.trim().split(/\r?\n/);
-    
-                // CORREÇÃO APLICADA AQUI: Usando um Regex para separar as colunas,
-                // que ignora ponto e vírgulas dentro de aspas duplas.
-                const csvRegex = /;(?=(?:(?:[^"]*"){2})*[^"]*$)/;
-    
-                const cabecalho = linhas[0].split(csvRegex).map(h => h.trim());
-    
+                const cabecalho = linhas[0].split(',').map(h => h.trim());
+                
+                // Regex para separar por vírgulas, mas ignorar vírgulas dentro de aspas duplas
+                const csvRegex = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/;
+
                 const dadosJson = linhas.slice(1).map(linha => {
-                    // CORREÇÃO APLICADA AQUI TAMBÉM
                     const valores = linha.split(csvRegex);
                     const obj = {};
                     cabecalho.forEach((chave, i) => {
                         let valor = valores[i] ? valores[i].trim() : '';
+
                         // Remove as aspas do início e do fim, se existirem
                         if (valor.startsWith('"') && valor.endsWith('"')) {
                             valor = valor.substring(1, valor.length - 1);
                         }
-                        const colunasNumericas = ['id', 'progresso', 'prioridade', 'impacto', 'cycle_time'];
+                        
+                        const colunasNumericas = ['id', 'progresso', 'prioridade', 'impacto'];
                         if (colunasNumericas.includes(chave) && valor !== '' && !isNaN(Number(valor))) {
                             obj[chave] = Number(valor);
                         } else {
@@ -241,96 +255,44 @@
                     });
                     return obj;
                 });
+
                 return dadosJson;
-    
+
             } catch (error) {
                 console.error('Erro ao buscar dados da planilha:', error);
-                return [];
+                return []; // Retorna um array vazio em caso de erro
             }
         }
-    
+
         // --- LÓGICA DAS ABAS ---
         function changeTab(tabName) {
             document.querySelectorAll('.tab-button').forEach(button => {
                 button.classList.remove('active');
-                if (button.dataset.tab === tabName) button.classList.add('active');
+                if (button.dataset.tab === tabName) {
+                    button.classList.add('active');
+                }
             });
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
             document.getElementById(`${tabName}-content`).classList.add('active');
         }
-    
+
         // --- RENDERIZAÇÃO ---
         
-        // Métricas da Aba 1
-        function calculateAndRenderMetrics(data) {
-            const today = new Date();
-            const thirtyDaysAgo = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 30);
-            
-            // 1. Taxa de Entrada
-            const newInitiatives = data.filter(p => p.data_entrada && parseDate(p.data_entrada) >= thirtyDaysAgo);
-            document.getElementById('taxa-entrada-valor').innerText = newInitiatives.length;
-    
-            // 2. Taxa de Saída
-            const completedInitiatives = data.filter(p => p.data_fim && parseDate(p.data_fim) >= thirtyDaysAgo);
-            document.getElementById('taxa-saida-valor').innerText = completedInitiatives.length;
-    
-            // 3. Velocidade (Throughput) - Média mensal
-            const completedEver = data.filter(p => p.data_fim);
-            const firstCompletion = completedEver.length > 0 ? completedEver.map(p => parseDate(p.data_fim)).sort((a,b) => a - b)[0] : new Date();
-            const monthsElapsed = (today.getFullYear() - firstCompletion.getFullYear()) * 12 + (today.getMonth() - firstCompletion.getMonth()) + 1;
-            const throughput = completedEver.length / (monthsElapsed || 1);
-            document.getElementById('throughput-valor').innerText = `${throughput.toFixed(1)}/mês`;
-    
-            // 4. Lead Time Médio
-            const withLeadTime = data.filter(p => p.data_inicio && p.data_fim);
-            const totalLeadTime = withLeadTime.reduce((sum, p) => {
-                const diff = parseDate(p.data_fim) - parseDate(p.data_inicio);
-                return sum + (diff / (1000 * 60 * 60 * 24)); // em dias
-            }, 0);
-            const avgLeadTime = withLeadTime.length > 0 ? totalLeadTime / withLeadTime.length : 0;
-            document.getElementById('lead-time-valor').innerText = `${avgLeadTime.toFixed(0)} dias`;
-    
-            // 5. Cycle Time Médio
-            const withCycleTime = data.filter(p => typeof p.cycle_time === 'number');
-            const totalCycleTime = withCycleTime.reduce((sum, p) => sum + p.cycle_time, 0);
-            const avgCycleTime = withCycleTime.length > 0 ? totalCycleTime / withCycleTime.length : 0;
-            document.getElementById('cycle-time-valor').innerText = `${avgCycleTime.toFixed(1)} dias`;
-    
-            // 6. Backlog Transportado (WIP)
-            const wip = data.filter(p => p.data_inicio && !p.data_fim);
-            document.getElementById('wip-valor').innerText = wip.length;
-            
-            // 7. Idade Média (Aging)
-            const wipItems = data.filter(p => p.data_entrada && !p.data_fim);
-            const totalAge = wipItems.reduce((sum, p) => {
-                const diff = today - parseDate(p.data_entrada);
-                return sum + (diff / (1000 * 60 * 60 * 24)); // em dias
-            }, 0);
-            const avgAge = wipItems.length > 0 ? totalAge / wipItems.length : 0;
-            document.getElementById('aging-valor').innerText = `${avgAge.toFixed(0)} dias`;
-            
-            // 8 & 9. Taxa de Aprovação e Descarte
-            const screened = data.filter(p => p.triada && (p.triada.toString().toLowerCase() === 'true' || p.triada === '1'));
-            const approved = screened.filter(p => p.aprovada && (p.aprovada.toString().toLowerCase() === 'true' || p.aprovada === '1'));
-            const approvalRate = screened.length > 0 ? (approved.length / screened.length) * 100 : 0;
-            const rejectionRate = 100 - approvalRate;
-            document.getElementById('aprovacao-valor').innerText = `${approvalRate.toFixed(0)}%`;
-            document.getElementById('descarte-valor').innerText = `${rejectionRate.toFixed(0)}%`;
-        }
-    
         // Gráfico da Aba 1
         function renderComplexityChart() {
             const ctx = document.getElementById('complexityChart').getContext('2d');
             const projectCounts = projectsData.reduce((acc, p) => {
-                const score = (p.prioridade || 0) + (p.impacto || 0);
+                const score = p.prioridade + p.impacto;
                 if (score <= 3) acc['Baixa Relevância'] = (acc['Baixa Relevância'] || 0) + 1;
                 else if (score === 4) acc['Oportunidade Tática'] = (acc['Oportunidade Tática'] || 0) + 1;
                 else if (score >= 5) acc['Alta Prioridade'] = (acc['Alta Prioridade'] || 0) + 1;
                 return acc;
             }, {});
-    
+
             new Chart(ctx, {
-                type: 'bar',
+                type: 'doughnut',
                 data: {
                     labels: Object.keys(projectCounts),
                     datasets: [{
@@ -351,14 +313,9 @@
                 },
                 options: {
                     responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    },
                     plugins: {
                         legend: {
-                            display: false,
+                            position: 'top',
                         },
                         title: {
                             display: false
@@ -367,7 +324,7 @@
                 }
             });
         }
-    
+
         // Tabela da Aba 2
         function renderSummaryTable() {
             const tableBody = document.getElementById('projects-table-body');
@@ -379,9 +336,9 @@
                 'Impedido': 'bg-red-500',
                 'Descartado': 'bg-gray-400'
             };
-    
+
             projectsData.forEach(p => {
-                const progressPercentage = ((p.progresso || 0) * 100).toFixed(0);
+                const progressPercentage = (p.progresso * 100).toFixed(0);
                 const row = `
                     <tr class="bg-white border-b hover:bg-gray-50">
                         <td class="px-6 py-4 font-medium text-gray-900">${p.iniciativa}</td>
@@ -408,14 +365,14 @@
                 tableBody.innerHTML += row;
             });
         }
-    
+
         // Matriz da Aba 3
         function renderMatrix(filteredData) {
             const dataToRender = filteredData || projectsData;
             document.querySelectorAll('[id^="cell-"]').forEach(cell => cell.innerHTML = '');
-    
+
             dataToRender.forEach(p => {
-                if (p.fluxo === '99. Descarte' || !p.impacto || !p.prioridade) return; 
+                if (p.fluxo === '99. Descarte') return; 
                 const cell = document.getElementById(`cell-${p.impacto}-${p.prioridade}`);
                 if (cell) {
                     const score = p.impacto + p.prioridade;
@@ -423,6 +380,7 @@
                     if (score <= 3) bgColor = 'bg-blue-200';
                     else if (score === 4) bgColor = 'bg-yellow-200';
                     else if (score >= 5) bgColor = 'bg-green-200';
+                    else if (score >= 6) bgColor = 'bg-red-200';
                     
                     const card = `
                         <div class="p-2 ${bgColor} rounded-md shadow-sm mb-2 text-xs cursor-pointer" title="${p.status}">
@@ -442,24 +400,24 @@
             
             const gps = [...new Set(projectsData.map(p => p.gp))];
             const areas = [...new Set(projectsData.map(p => p.responsavel))];
-    
+
             gps.sort().forEach(gp => {
-                if(gp) gpFilter.innerHTML += `<option>${gp}</option>`;
+                gpFilter.innerHTML += `<option>${gp}</option>`;
             });
             areas.sort().forEach(area => {
-                if(area) areaFilter.innerHTML += `<option>${area}</option>`;
+                areaFilter.innerHTML += `<option>${area}</option>`;
             });
-    
+
             document.getElementById('filter-gp').addEventListener('change', applyFilters);
             document.getElementById('filter-area').addEventListener('change', applyFilters);
             document.getElementById('filter-status').addEventListener('change', applyFilters);
         }
-    
+
         function applyFilters() {
             const selectedGp = document.getElementById('filter-gp').value;
             const selectedArea = document.getElementById('filter-area').value;
             const selectedStatus = document.getElementById('filter-status').value;
-    
+
             const filteredData = projectsData.filter(p => {
                 const gpMatch = selectedGp === 'Todos' || p.gp === selectedGp;
                 const areaMatch = selectedArea === 'Todos' || p.responsavel === selectedArea;
@@ -468,24 +426,23 @@
             });
             renderMatrix(filteredData);
         }
-    
+
         // --- INICIALIZAÇÃO ---
         document.addEventListener('DOMContentLoaded', async () => {
             const dadosCarregados = await carregarDadosDaPlanilha();
-    
+
             if (dadosCarregados && dadosCarregados.length > 0) {
                 projectsData = dadosCarregados;
                 
-                calculateAndRenderMetrics(projectsData);
                 renderComplexityChart();
                 renderSummaryTable();
                 setupFilters();
-                applyFilters();
+                applyFilters(); // Renderiza a matriz com os filtros iniciais
             } else {
                  document.querySelector('main').innerHTML = `
                     <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative" role="alert">
                         <strong class="font-bold">Erro ao carregar dados!</strong>
-                        <span class="block sm:inline">Não foi possível buscar as informações da planilha. Verifique se o link está correto, se a planilha está publicada na web como CSV e se o delimitador está correto.</span>
+                        <span class="block sm:inline">Não foi possível buscar as informações da planilha. Verifique se o link está correto e se a planilha está publicada na web como CSV.</span>
                     </div>
                 `;
             }
@@ -493,4 +450,3 @@
     </script>
 </body>
 </html>
-
